@@ -39,8 +39,9 @@ amqp.connect('amqp://localhost', function(error0, connection) {
 
       channel.consume(q.queue, function(msg) {
         if(msg.content) {
-            send(msg.content.toString());
-            console.log(" [x] %s", msg.content.toString());
+            let obj = JSON.parse(msg.content)
+            send(obj);
+            console.log(" [x] %s", obj.content.toString());
           }
       }, {
         noAck: true
@@ -50,17 +51,25 @@ amqp.connect('amqp://localhost', function(error0, connection) {
 });
 
 const sendMsg = `
-    mutation addMessage($content: String) {
-        insert_messages_one(object: {content: $content}) {
+    mutation addMessage($user_sender_id: Int, $user_to_id: Int, $content: String) {
+        insert_messages_one(
+            object: {
+                user_sender_id: $user_sender_id
+                user_to_id: $user_to_id
+                content: $content
+            }
+        ) {
             id
         }
     }
 `
 
-async function send(msg) {
+async function send({user_sender_id, user_to_id, content}) {
     const result = await client
         .mutation(sendMsg, {
-            content: msg,
+            user_sender_id,
+            user_to_id,
+            content
         })
         .toPromise()
 

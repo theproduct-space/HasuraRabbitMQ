@@ -2,11 +2,19 @@ import { useSubscription, gql } from "@apollo/client";
 
 const MESSAGE_SUBSCRIPTION = gql`
   subscription onMessageAdded {
-    messages(order_by: {created_at: desc}) {
+    messages(order_by: {created_at: desc}, where: {_or: [{user_sender_id: {_eq: 1}}, {user_to_id: {_eq: 1}}]}) {
       id
       content
       created_at
       updated_at
+      user_sender {
+        id
+        username
+      }
+      user_to {
+        id
+        username
+      }
     }
   }
 `;
@@ -24,6 +32,9 @@ function App() {
         <div key={element.id} style={{display: "flex", flexDirection: "row"}}>
           <div style={{width: "180px"}}>
             [{date.toLocaleString('en-GB')}]
+          </div>
+          <div style={{width: "150px"}}>
+            {element.user_sender.username + " to " + element.user_to.username + ": "}
           </div>
           <div>
             {element.content}

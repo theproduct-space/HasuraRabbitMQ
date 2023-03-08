@@ -1,0 +1,32 @@
+table:
+  name: counter_table
+  schema: public
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - id
+        - value
+        - created_at
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - value
+        - created_at
+      filter: {}
+update_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - value
+        - created_at
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: anonymous
+    permission:
+      filter: {}

@@ -67,5 +67,4 @@ async function send(msg) {
     if (result.error) {
         console.log(result.error);
     }
-
 }

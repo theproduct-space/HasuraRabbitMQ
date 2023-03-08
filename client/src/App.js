@@ -19,7 +19,17 @@ function App() {
   const printData = (data) => {
     console.log(data);
     return data.messages.map(element => {
-      return <div key={element.id}>{element.content}</div>
+      let date = new Date(element.created_at);
+      return (
+        <div key={element.id} style={{display: "flex", flexDirection: "row"}}>
+          <div style={{width: "180px"}}>
+            [{date.toLocaleString('en-GB')}]
+          </div>
+          <div>
+            {element.content}
+          </div>
+        </div>
+      );
     });
   }
 
@@ -27,7 +37,8 @@ function App() {
 
   return (
     <div>
-      <div>
+      <h3>Messages :</h3>
+      <div style={{display : "flex", flexDirection: "column"}}>
         {printData(data)}
       </div>
     </div>
